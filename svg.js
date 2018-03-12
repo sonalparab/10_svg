@@ -1,53 +1,51 @@
 var growing = true;
 var pic = document.getElementById("pic");
 var clearButt = document.getElementById("clear");
-var circleR = 0;
-var cx = 150;
-var cy = 200;
-var vX = 2;
-var vY = 1;
 
 var dvdId;
 
-var createDVD = function(x, y, r, c){
-    var dvd = {
-	x:x,
-	y:y,
-	r:r,
-	c:c,
-	cir:document.createElementNS("http://www.w3.org/2000/svg", "circle"),
-	display: function(){
-	    pic.removeChild(this.cir);
-
-	    this.cir.setAttribute("cx", this.x);
-	    this.cir.setAttribute("cy", this.y);
-	    this.cir.setAttribute("r", this.r);
-	    this.cir.setAttribute("fill", this.c);
-	    pic.appendChild(cir);
-
-	    this.x += vX;
-	    this.y += vY;
-
-	    if(this.x >= 220 || this.x <= 40){
-		vX *= -1;
-	    }
-	    if(this.y >= 340 || this.y <= 30){
-		vY *= -1;
-	    }
-	}
-    }
+var createDVD = function(){
+    d = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+    var x = Math.floor(5 + Math.random() * 300-10);
+    var y = Math.floor(5 + Math.random() * 400-10);
+    d.setAttribute("cx",x);
+    d.setAttribute("cy",y);
+    d.setAttribute("r",10);
+    d.setAttribute("fill","goldenrod");
+    pic.appendChild(d);
+    return d;
 }
 
 var dvdWrap = function(e){
-    createDVD(cx, cy, 30, "goldenrod");
+
+    var d = createDVD();
+    var x = parseInt(d.getAttribute("cx"),10);
+    var y = parseInt(d.getAttribute("cy"),10);
+
+    var vX = 3;
+    var vY = 2;
     
-    dvdId = setInterval(dvd.display(), 25);
-}
+    var move = function(){
+	x += vX;
+	y += vY;
+	if(x >= 290 || x <= 10){
+	    vX *= -1;
+	}
+	if(y >= 390 || y <= 10){
+	    vY *= -1;
+	}
+
+	d.setAttribute("cx", x);
+	d.setAttribute("cy", y);
+    };
+    dvdId = setInterval(move, 10);
+};
 
 pic.addEventListener("click", dvdWrap);
 
 var clearFxn = function(e){
     pic.innerHTML = "";
+    clearInterval(dvdId);
 }
 
 clearButt.addEventListener("click", clearFxn);
